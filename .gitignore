@@ -1,0 +1,8 @@
+.metadata
+.recommenders
+bin
+*.class
+#eclipse
+.classpath
+.settings
+.project
