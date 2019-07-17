@@ -25,32 +25,33 @@ public class ProductServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		PrintWriter out = response.getWriter(); // opens a character stream to client-Browser
-		// ServletOutputStream out = response.getOutputStream(); //opens byte stream to
-		// client
-		response.setContentType("text/html"); // MIME type
-		out.print("<html><body>");
-		out.print("<h1>Product List</h1>");
-		out.print("<table border='1'>");
-		out.print("<tr><th>ID</th><th>Name</th><th>Price</th></tr>");
-
+		
 		ProductDao productDao = new ProductDaoJdbcImpl();
 		try {
-			List<Product> prds = productDao.getProducts();
-			for (Product p : prds) {
-				out.print("<tr>");
-					out.print("<td>" + p.getId() + "</td>");
-					out.print("<td>" + p.getName() + "</td>");
-					out.print("<td>" + p.getPrice() + "</td>");
-				out.print("</tr>");
-			}
-
+			List<Product> prds =productDao.getProducts();
+			request.setAttribute("products", prds);
+			//server side redirection
+			request.getRequestDispatcher("products.jsp").forward(request, response);
 		} catch (FetchException e) {
 			e.printStackTrace();
-			out.println(e.getMessage());
 		}
-		out.print("</table></body></html>");
-	}
+		
+		/*
+		 * PrintWriter out = response.getWriter(); // opens a character stream to
+		 * client-Browser // ServletOutputStream out = response.getOutputStream();
+		 * //opens byte stream to // client response.setContentType("text/html"); //
+		 * MIME type out.print("<html><body>"); out.print("<h1>Product List</h1>");
+		 * out.print("<table border='1'>");
+		 * out.print("<tr><th>ID</th><th>Name</th><th>Price</th></tr>");
+		 * 
+		 * ProductDao productDao = new ProductDaoJdbcImpl(); try { List<Product> prds =
+		 * productDao.getProducts(); for (Product p : prds) { out.print("<tr>");
+		 * out.print("<td>" + p.getId() + "</td>"); out.print("<td>" + p.getName() +
+		 * "</td>"); out.print("<td>" + p.getPrice() + "</td>"); out.print("</tr>"); }
+		 * 
+		 * } catch (FetchException e) { e.printStackTrace();
+		 * out.println(e.getMessage()); } out.print("</table></body></html>");
+		 */	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
